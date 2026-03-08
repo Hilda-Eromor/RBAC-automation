@@ -1,49 +1,17 @@
-name: CI/CD Pipeline
-
+name: Test Workflow
 
 on:
   push:
     branches:
-      - main   # runs pipeline when code is pushed to main
+      - main
 
 jobs:
-  build-and-deploy:
+  hello-world:
     runs-on: ubuntu-latest
-
     steps:
-      # Checkout code
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Example: set up Python (adjust if using Node.js, Java, etc.)
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
+      - name: Say hello
+        run: echo "Hello, GitHub Actions is working!"
 
-      # Install dependencies
-      - name: Install dependencies
-        run: |
-          pip install -r requirements.txt
-
-      # Run tests
-      - name: Run tests
-        run: |
-          pytest
-
-      # Deploy to Azure (example using Azure CLI)
-      - name: Deploy to Azure
-        uses: azure/CLI@1.0.7
-        with:
-          azcliversion: 2.30.0
-          inlineScript: |
-            az login --service-principal \
-              -u ${{ secrets.AZURE_CLIENT_ID }} \
-              -p ${{ secrets.AZURE_CLIENT_SECRET }} \
-              --tenant ${{ secrets.AZURE_TENANT_ID }}
-
-            echo "Provisioning RBAC roles..."
-            az role assignment create \
-              --role Contributor \
-              --assignee <principalId> \
-              --scope <scope>
